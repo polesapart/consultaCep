@@ -1,4 +1,4 @@
-package com.aleques.cep
+package com.github.polesapart.cep
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi

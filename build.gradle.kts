@@ -16,12 +16,13 @@ repositories {
 }
 
 dependencies {
-    api("com.squareup.retrofit2:retrofit:2.9.0")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-    api("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
-    api ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     testImplementation(kotlin("test-junit"))
+    testImplementation(kotlin("test"))
     testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     testImplementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
@@ -49,4 +50,9 @@ val compileTestKotlin: KotlinCompile by tasks
 
 compileTestKotlin.kotlinOptions {
     freeCompilerArgs += listOf("-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi")
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }

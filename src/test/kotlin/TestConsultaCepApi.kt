@@ -1,6 +1,6 @@
-import com.aleques.cep.CepApiErrorException
-import com.aleques.cep.ConsultaCep
-import com.aleques.cep.HttpErrorException
+import com.github.polesapart.cep.CepApiErrorException
+import com.github.polesapart.cep.ConsultaCep
+import com.github.polesapart.cep.HttpErrorException
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlin.test.BeforeTest
 import kotlin.test.Test

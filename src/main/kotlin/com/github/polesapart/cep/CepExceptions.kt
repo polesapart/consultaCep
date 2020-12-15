@@ -1,4 +1,4 @@
-package com.aleques.cep
+package com.github.polesapart.cep
 
 import java.lang.Exception
 
