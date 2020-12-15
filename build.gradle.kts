@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "1.4.21"
     kotlin("plugin.serialization") version "1.4.21"
     id("pl.allegro.tech.build.axion-release") version "1.12.1"
-    id("java-library")
+    id("java")
     id("maven")
 }
 
