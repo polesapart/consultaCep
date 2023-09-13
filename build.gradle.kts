@@ -5,8 +5,8 @@ plugins {
 
     kotlin("plugin.serialization") version "1.9.0"
     id("pl.allegro.tech.build.axion-release") version "1.15.1"
-    id("java")
-    id("maven-publish")
+    id("java-library")
+    `maven-publish`
 }
 
 group = "com.github.polesapart"
@@ -60,5 +60,13 @@ java {
     withJavadocJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+publishing {
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+        }
     }
 }
