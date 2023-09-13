@@ -1,11 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.21"
-    kotlin("plugin.serialization") version "1.4.21"
+    kotlin("jvm") version "1.9.0"
+
+    kotlin("plugin.serialization") version "1.9.0"
     id("pl.allegro.tech.build.axion-release") version "1.12.1"
     id("java")
-    id("maven")
+    id("maven-publish")
 }
 
 group = "com.github.polesapart"
@@ -38,12 +39,8 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
         freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xjsr305=strict")
     }
-
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
 }
 
 val compileTestKotlin: KotlinCompile by tasks
@@ -55,4 +52,7 @@ compileTestKotlin.kotlinOptions {
 java {
     withSourcesJar()
     withJavadocJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
 }
