@@ -70,3 +70,12 @@ publishing {
         }
     }
 }
+
+scmVersion {
+    tag {
+        prefix.set("release")
+        versionSeparator.set("-")
+        //useHighestVersion.set(true)
+    }
+    versionCreator("versionWithBranch")
+}
