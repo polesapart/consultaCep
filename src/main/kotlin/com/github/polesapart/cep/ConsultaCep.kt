@@ -7,8 +7,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.http.GET
-import retrofit2.http.Path
 
 
 @ExperimentalSerializationApi
@@ -45,7 +43,7 @@ class ConsultaCep(debugHttp: Boolean = false) {
             it
         }
     }.build()
-    private val service = retrofit.create(ConsultaCepService::class.java)
+    private val service = retrofit.create(CepRetrofitService::class.java)
 
     suspend fun getDataByAddress(estado: String, municipio: String, logradouro: String): List<Map<String, String?>> {
         return runCatching {
@@ -65,16 +63,4 @@ class ConsultaCep(debugHttp: Boolean = false) {
         }
         return ret
     }
-}
-
-interface ConsultaCepService {
-    @GET("{cep}/json")
-    suspend fun getCepAsJson(@Path("cep") cep: String): Map<String, String?>
-
-    @GET("{estado}/{municipio}/{logradouro}/json")
-    suspend fun getCepByAddress(
-        @Path("estado") estado: String, @Path("municipio") municipio: String,
-        @Path("logradouro") logradouro: String
-    ): List<Map<String, String?>>
-
 }
