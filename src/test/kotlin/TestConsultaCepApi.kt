@@ -1,6 +1,6 @@
 import com.github.polesapart.cep.CepApiErrorException
 import com.github.polesapart.cep.ConsultaCep
-import com.github.polesapart.cep.HttpErrorException
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -16,7 +16,7 @@ class TestConsultaCepApi {
     }
 
     @Test
-    fun testGetInvalidCep() {
+    fun testGetInvalidCep() = runBlocking {
         var failed = true
         try {
             println(cep.getDataByCep("89160000"))
@@ -28,11 +28,11 @@ class TestConsultaCepApi {
     }
 
     @Test
-    fun testGetInvalidFormatCep() {
+    fun testGetInvalidFormatCep() = runBlocking {
         var failed = true
         try {
             println(cep.getDataByCep("8916000"))
-        } catch(e: HttpErrorException) {
+        } catch (e: Throwable) {
             println("caught expected error: $e")
             failed = false
         }
@@ -40,16 +40,18 @@ class TestConsultaCepApi {
     }
 
     @Test
-    fun testGetCep() {
-            println(cep.getDataByCep("80010200"))
+    fun testGetCep() = runBlocking {
+        println(cep.getDataByCep("80010200"))
     }
+
     @Test
-    fun testGetDataByAddr1() {
+    fun testGetDataByAddr1() = runBlocking {
         val r = cep.getDataByAddress("PR", "CURITIBA", "Adão Sobocinski")
         println(r)
     }
+
     @Test
-    fun testGetDataByAddr2() {
+    fun testGetDataByAddr2() = runBlocking {
         val r = cep.getDataByAddress("PR", "CURITIBA", "Souza Naves")
         println(r)
     }

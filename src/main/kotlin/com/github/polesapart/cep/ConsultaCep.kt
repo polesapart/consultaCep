@@ -6,15 +6,13 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 
-
 @ExperimentalSerializationApi
-class ConsultaCep constructor(debugHttp: Boolean = false) {
+class ConsultaCep(debugHttp: Boolean = false) {
 
     companion object {
         private const val baseUrl = "https://viacep.com.br/ws/"
@@ -34,8 +32,10 @@ class ConsultaCep constructor(debugHttp: Boolean = false) {
     }
 
 
+    private val json = Json { isLenient = true; ignoreUnknownKeys = true }
+
     private val retrofit = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(
-        Json { isLenient = true; ignoreUnknownKeys = true }.asConverterFactory(
+        json.asConverterFactory(
             contentType
         )
     ).let {
@@ -47,35 +47,34 @@ class ConsultaCep constructor(debugHttp: Boolean = false) {
     }.build()
     private val service = retrofit.create(ConsultaCepService::class.java)
 
-    fun getDataByAddress(estado: String, municipio: String, logradouro: String): List<Map<String, String?>> {
-        val ret = service.getCepByAddress(estado, municipio, logradouro).execute()
-        if (ret.isSuccessful) {
-            return ret.body()!!
-        }
-        throw  HttpErrorException("Http transport failed: ${ret.code()} ${ret.body()} ${ret.errorBody()}")
+    suspend fun getDataByAddress(estado: String, municipio: String, logradouro: String): List<Map<String, String?>> {
+        return runCatching {
+            service.getCepByAddress(
+                estado,
+                municipio,
+                logradouro
+            )
+        }.getOrElse { throw HttpErrorException("Error: ${it.message} ${it.stackTraceToString()}") }
     }
 
-    fun getDataByCep(cep: String): Map<String, String?> {
-        val ret = service.getCepAsJson(cep).execute()
-        if (ret.isSuccessful) {
-            val r = ret.body()!!
-            if (r.containsKey("erro")) {
-                throw CepApiErrorException("Unknown CEP $cep")
-            }
-            return r
+    suspend fun getDataByCep(cep: String): Map<String, String?> {
+        val ret =
+            runCatching { service.getCepAsJson(cep) }.getOrElse { throw HttpErrorException("Error: ${it.message} ${it.stackTraceToString()}") }
+        if (ret.containsKey("erro")) {
+            throw CepApiErrorException("Cep Inexistente")
         }
-        throw HttpErrorException("Http transport failed: ${ret.code()} ${ret.errorBody()}")
+        return ret
     }
 }
 
 interface ConsultaCepService {
     @GET("{cep}/json")
-    fun getCepAsJson(@Path("cep") cep: String): Call<Map<String, String?>>
+    suspend fun getCepAsJson(@Path("cep") cep: String): Map<String, String?>
 
     @GET("{estado}/{municipio}/{logradouro}/json")
-    fun getCepByAddress(
+    suspend fun getCepByAddress(
         @Path("estado") estado: String, @Path("municipio") municipio: String,
         @Path("logradouro") logradouro: String
-    ): Call<List<Map<String, String?>>>
+    ): List<Map<String, String?>>
 
 }

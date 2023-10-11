@@ -8,7 +8,7 @@ import java.lang.Exception
 open class BaseCepApiErrorException(message: String) : Exception(message)
 
 /**
- * A terminal error was reported from the API layer, i.e. the request object is invalid or inexistant.
+ * A terminal error was reported from the API layer, i.e. the request object is invalid or nonexistent.
  */
 class CepApiErrorException(message: String) : BaseCepApiErrorException(message)
 

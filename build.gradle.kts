@@ -17,17 +17,22 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") {
+        exclude("com.squareup.okhttp3", "okio")
+        exclude("com.squareup.okio", "okhttp")
+    }
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
 
     testImplementation(kotlin("test-junit"))
     testImplementation(kotlin("test"))
     testImplementation("com.squareup.retrofit2:retrofit:2.9.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     testImplementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-    testImplementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    testImplementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 }
 
 tasks.test {
