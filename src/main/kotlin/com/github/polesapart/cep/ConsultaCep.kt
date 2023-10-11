@@ -5,42 +5,28 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 
 @ExperimentalSerializationApi
-class ConsultaCep(debugHttp: Boolean = false) {
+class ConsultaCep(private val httpClient: OkHttpClient? = null) {
 
     companion object {
-        private const val baseUrl = "https://viacep.com.br/ws/"
+        private const val BASEURL = "https://viacep.com.br/ws/"
         private val contentType = "application/json; charset=utf-8".toMediaType()
 
-    }
-
-    private val interceptor = if (debugHttp) {
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    } else {
-        null
-    }
-    private val httpClient = if (debugHttp) {
-        OkHttpClient.Builder().addInterceptor(interceptor!!).build()
-    } else {
-        null
     }
 
 
     private val json = Json { isLenient = true; ignoreUnknownKeys = true }
 
-    private val retrofit = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(
+    private val retrofit = Retrofit.Builder().baseUrl(BASEURL).addConverterFactory(
         json.asConverterFactory(
             contentType
         )
-    ).let {
-        if (debugHttp) {
-            it.client(httpClient!!)
-        } else {
-            it
+    ).apply {
+        if (httpClient != null) {
+            this.client(httpClient)
         }
     }.build()
     private val service = retrofit.create(CepRetrofitService::class.java)
